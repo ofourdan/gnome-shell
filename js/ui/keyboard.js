@@ -202,6 +202,8 @@ var Keyboard = new Lang.Class({
 
         Main.layoutManager.connect('monitors-changed', Lang.bind(this, this._redraw));
         this._redraw();
+
+        this._setupKeyboard();
     },
 
     _setCaretTrackerEnabled: function (enabled) {
@@ -312,12 +314,10 @@ var Keyboard = new Lang.Class({
 
         this._setCaretTrackerEnabled(this._enableKeyboard);
 
-        if (this._enableKeyboard) {
-            if (!this._keyboard)
-                this._setupKeyboard();
-            else
-                Main.layoutManager.showKeyboard();
-        } else {
+        if (this._enableKeyboard && !this._keyboard) {
+            // Don't show it here, we wait for the caret tracker to tell us so.
+            this._setupKeyboard();
+        } else if (!this._enableKeyboard) {
             Main.layoutManager.hideKeyboard(true);
         }
     },
